@@ -47,7 +47,7 @@
     async function playStretched() {
       const audioContext = new (window.AudioContext || window.webkitAudioContext)();
       const isUp = percentChange >= 0;
-      const file = isUp ? 'FART_1SEC_FORWARD.aif' : 'FART_1SEC_REVERSE.aif';
+      const file = isUp ? 'FART_1SEC_FORWARD.mp3' : 'FART_1SEC_REVERSE.mp3';
       const response = await fetch(file);
       const arrayBuffer = await response.arrayBuffer();
       const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
@@ -55,7 +55,6 @@
       const source = audioContext.createBufferSource();
       source.buffer = audioBuffer;
 
-      // More dramatic stretch: 1s base + 1s per % change → inverse is playbackRate
       let stretch = 1 + Math.abs(percentChange);
       source.playbackRate.value = 1 / stretch;
 
