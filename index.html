@@ -44,12 +44,8 @@
       `;
 
       const audio = document.getElementById('btc-audio');
-      const stretch = 1 + Math.abs(change / 100);
-      const isUp = change >= 0;
-
-      const src = isUp ? 'FART_1SEC_FORWARD.aif' : 'FART_1SEC_REVERSE.aif';
-      audio.src = src;
-      audio.playbackRate = 1 / stretch;
+      audio.src = 'daily_audio.mp3';
+      audio.playbackRate = 1.0;
     }
 
     fetchBTCChange();
