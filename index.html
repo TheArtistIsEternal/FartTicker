@@ -5,10 +5,10 @@
   <meta charset="UTF-8">
   <title>Fart Ticker</title>
   <style>
-    body { font-family: sans-serif; text-align: center; margin-top: 3em; }
+    body { font-family: sans-serif; text-align: center; margin-top: 3em; background: #111; color: #fff; }
     h1 { font-size: 2em; }
     #prices { margin: 1em 0; }
-    audio { margin-top: 2em; }
+    audio { margin-top: 2em; filter: drop-shadow(0 0 4px lime); }
     .donate { margin-top: 3em; }
   </style>
 </head>
@@ -24,7 +24,7 @@
   </div>
 
   <div class="donate">
-    <a href="https://www.buymeacoffee.com/YOURUSERNAME" target="_blank">
+    <a href="https://www.buymeacoffee.com/fartticker" target="_blank">
       <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 50px !important;width: 217px !important;">
     </a>
   </div>
@@ -44,10 +44,9 @@
       `;
 
       const audio = document.getElementById('btc-audio');
-      const stretch = 1 + Math.abs(change / 100); // stretch factor
+      const stretch = 1 + Math.abs(change / 100);
       const isUp = change >= 0;
 
-      // Choose audio file
       const src = isUp ? 'FART_1SEC_FORWARD.aif' : 'FART_1SEC_REVERSE.aif';
       audio.src = src;
       audio.playbackRate = 1 / stretch;
