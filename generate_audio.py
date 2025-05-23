@@ -1,10 +1,7 @@
 
 import requests
 from pydub import AudioSegment
-import datetime
-import os
 
-# Paths
 FORWARD_AUDIO = "FART_1SEC_FORWARD.aif"
 REVERSE_AUDIO = "FART_1SEC_REVERSE.aif"
 OUTPUT_AUDIO = "daily_audio.mp3"
@@ -17,9 +14,15 @@ def fetch_btc_change():
 
 def stretch_audio(input_path, output_path, stretch_factor):
     audio = AudioSegment.from_file(input_path)
+
+    # Calculate new frame rate
     new_frame_rate = int(audio.frame_rate / stretch_factor)
+
+    # Apply frame rate adjustment
     stretched = audio._spawn(audio.raw_data, overrides={"frame_rate": new_frame_rate})
     stretched = stretched.set_frame_rate(audio.frame_rate)
+
+    # Export stretched file
     stretched.export(output_path, format="mp3")
 
 def main():
