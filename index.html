@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Fart Ticker – Support with Stripe</title>
+  <title>Fart Ticker💨</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     :root {
@@ -22,8 +22,21 @@
       color: var(--fg);
       transition: background 0.3s, color 0.3s;
     }
-    h1 { font-size: 2em; }
-    #description { font-size: 0.9em; margin: 0.5em 0 1em; color: gray; }
+    h1 {
+      font-size: 2.2em;
+      margin-bottom: 0.3em;
+      animation: wobble 2s infinite ease-in-out;
+    }
+    @keyframes wobble {
+      0%, 100% { transform: rotate(0deg); }
+      25% { transform: rotate(1deg); }
+      75% { transform: rotate(-1deg); }
+    }
+    #description {
+      font-size: 0.9em;
+      margin: 0.5em 0 1em;
+      color: gray;
+    }
     #prices { margin: 1em 0; }
     .ticker-buttons button {
       margin: 0.5em;
@@ -73,7 +86,7 @@
 </head>
 <body data-theme="dark">
 
-  <h1>💨 Fart Ticker</h1>
+  <h1>Fart Ticker 💨</h1>
   <div id="description">This page turns crypto price changes into fart sounds.</div>
 
   <div class="ticker-buttons">
@@ -88,7 +101,7 @@
     <button onclick="toggleTheme()">🌓 Toggle Theme</button>
   </div>
 
-  <button id="play" onclick="playStretched()">▶️ Play % Change Sound</button>
+  <button id="play" onclick="playStretched()">Hear the Price Change 💨</button>
 
   <div class="animation" id="animation">💨💸</div>
 
