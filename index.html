@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Fart Ticker – Multi Asset + Working Indices</title>
+  <title>Fart Ticker – Crypto Only</title>
   <style>
     body { font-family: sans-serif; text-align: center; margin-top: 2em; background: #111; color: #fff; }
     h1 { font-size: 2em; }
@@ -41,10 +41,6 @@
   <div class="ticker-buttons">
     <button onclick="setAsset('bitcoin')">Bitcoin</button>
     <button onclick="setAsset('ethereum')">Ethereum</button>
-    <button onclick="setAsset('^IXIC')">NASDAQ</button>
-    <button onclick="setAsset('^GSPC')">S&P 500</button>
-    <button onclick="setAsset('^DJI')">DOW</button>
-    <button onclick="setAsset('^VIX')">VIX</button>
   </div>
 
   <div id="prices">
@@ -72,22 +68,6 @@
       updatePriceDisplay(asset, price, yesterday, change);
     }
 
-    async function fetchIndex(symbol) {
-      const fmpMap = {
-        '^IXIC': '^IXIC',
-        '^GSPC': '^GSPC',
-        '^DJI': '^DJI',
-        '^VIX': '^VIX'
-      };
-      const url = `https://financialmodelingprep.com/api/v3/quote/${fmpMap[symbol]}?apikey=demo`;
-      const response = await fetch(url);
-      const data = await response.json();
-      const current = data[0].price;
-      const change = data[0].changesPercentage;
-      const yesterday = current / (1 + (change / 100));
-      updatePriceDisplay(symbol, current, yesterday, change);
-    }
-
     function updatePriceDisplay(asset, current, yesterday, change) {
       percentChange = parseFloat(change.toFixed(2));
       document.getElementById('prices').innerHTML = `
@@ -100,11 +80,7 @@
 
     function setAsset(asset) {
       currentAsset = asset;
-      if (asset === 'bitcoin' || asset === 'ethereum') {
-        fetchCoinGecko(asset);
-      } else {
-        fetchIndex(asset);
-      }
+      fetchCoinGecko(asset);
     }
 
     async function playStretched() {
