@@ -1,0 +1,59 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Fart Ticker</title>
+  <style>
+    body { font-family: sans-serif; text-align: center; margin-top: 3em; }
+    h1 { font-size: 2em; }
+    #prices { margin: 1em 0; }
+    audio { margin-top: 2em; }
+    .donate { margin-top: 3em; }
+  </style>
+</head>
+<body>
+
+  <h1>💨 Fart Ticker</h1>
+  <div id="prices">
+    <p>Loading Bitcoin prices...</p>
+  </div>
+
+  <div id="audio-container">
+    <audio id="btc-audio" controls></audio>
+  </div>
+
+  <div class="donate">
+    <a href="https://www.buymeacoffee.com/YOURUSERNAME" target="_blank">
+      <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 50px !important;width: 217px !important;">
+    </a>
+  </div>
+
+  <script>
+    async function fetchBTCChange() {
+      const res = await fetch('https://api.coingecko.com/api/v3/coins/bitcoin');
+      const data = await res.json();
+      const current = data.market_data.current_price.usd;
+      const yesterday = current / (1 + data.market_data.price_change_percentage_24h / 100);
+      const change = data.market_data.price_change_percentage_24h.toFixed(2);
+
+      document.getElementById('prices').innerHTML = `
+        <p>💰 Current BTC: $${current.toFixed(2)}</p>
+        <p>🕒 Yesterday's BTC: $${yesterday.toFixed(2)}</p>
+        <p><strong>Change: ${change}%</strong></p>
+      `;
+
+      const audio = document.getElementById('btc-audio');
+      const stretch = 1 + Math.abs(change / 100); // stretch factor
+      const isUp = change >= 0;
+
+      // Choose audio file
+      const src = isUp ? 'FART_1SEC_FORWARD.aif' : 'FART_1SEC_REVERSE.aif';
+      audio.src = src;
+      audio.playbackRate = 1 / stretch;
+    }
+
+    fetchBTCChange();
+  </script>
+</body>
+</html>
