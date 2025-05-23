@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Live Fart Ticker</title>
+  <title>Live Fart Ticker (Dramatic)</title>
   <style>
     body { font-family: sans-serif; text-align: center; margin-top: 3em; background: #111; color: #fff; }
     h1 { font-size: 2em; }
@@ -55,8 +55,9 @@
       const source = audioContext.createBufferSource();
       source.buffer = audioBuffer;
 
-      const stretchFactor = 1 + Math.abs(percentChange / 100);
-      source.playbackRate.value = 1 / stretchFactor;
+      // More dramatic stretch: 1s base + 1s per % change → inverse is playbackRate
+      let stretch = 1 + Math.abs(percentChange);
+      source.playbackRate.value = 1 / stretch;
 
       source.connect(audioContext.destination);
       source.start();
