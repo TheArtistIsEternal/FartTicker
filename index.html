@@ -3,25 +3,23 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Fart Ticker</title>
+  <title>Live Fart Ticker</title>
   <style>
     body { font-family: sans-serif; text-align: center; margin-top: 3em; background: #111; color: #fff; }
     h1 { font-size: 2em; }
     #prices { margin: 1em 0; }
-    audio { margin-top: 2em; filter: drop-shadow(0 0 4px lime); }
+    button { margin-top: 2em; padding: 1em 2em; font-size: 1.2em; background: lime; border: none; border-radius: 8px; cursor: pointer; }
     .donate { margin-top: 3em; }
   </style>
 </head>
 <body>
 
-  <h1>💨 Fart Ticker</h1>
+  <h1>💨 Live Fart Ticker</h1>
   <div id="prices">
     <p>Loading Bitcoin prices...</p>
   </div>
 
-  <div id="audio-container">
-    <audio id="btc-audio" controls></audio>
-  </div>
+  <button onclick="playStretched()">▶️ Play Sound</button>
 
   <div class="donate">
     <a href="https://www.buymeacoffee.com/fartticker" target="_blank">
@@ -30,22 +28,38 @@
   </div>
 
   <script>
+    let percentChange = 0;
+
     async function fetchBTCChange() {
       const res = await fetch('https://api.coingecko.com/api/v3/coins/bitcoin');
       const data = await res.json();
       const current = data.market_data.current_price.usd;
       const yesterday = current / (1 + data.market_data.price_change_percentage_24h / 100);
-      const change = data.market_data.price_change_percentage_24h.toFixed(2);
+      percentChange = parseFloat(data.market_data.price_change_percentage_24h.toFixed(2));
 
       document.getElementById('prices').innerHTML = `
         <p>💰 Current BTC: $${current.toFixed(2)}</p>
         <p>🕒 Yesterday's BTC: $${yesterday.toFixed(2)}</p>
-        <p><strong>Change: ${change}%</strong></p>
+        <p><strong>Live Change: ${percentChange}%</strong></p>
       `;
+    }
 
-      const audio = document.getElementById('btc-audio');
-      audio.src = 'daily_audio.mp3';
-      audio.playbackRate = 1.0;
+    async function playStretched() {
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      const isUp = percentChange >= 0;
+      const file = isUp ? 'FART_1SEC_FORWARD.aif' : 'FART_1SEC_REVERSE.aif';
+      const response = await fetch(file);
+      const arrayBuffer = await response.arrayBuffer();
+      const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+
+      const source = audioContext.createBufferSource();
+      source.buffer = audioBuffer;
+
+      const stretchFactor = 1 + Math.abs(percentChange / 100);
+      source.playbackRate.value = 1 / stretchFactor;
+
+      source.connect(audioContext.destination);
+      source.start();
     }
 
     fetchBTCChange();
