@@ -3,23 +3,55 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Live Fart Ticker (Dramatic)</title>
+  <title>Fart Ticker – Multi Asset</title>
   <style>
-    body { font-family: sans-serif; text-align: center; margin-top: 3em; background: #111; color: #fff; }
+    body { font-family: sans-serif; text-align: center; margin-top: 2em; background: #111; color: #fff; }
     h1 { font-size: 2em; }
     #prices { margin: 1em 0; }
-    button { margin-top: 2em; padding: 1em 2em; font-size: 1.2em; background: lime; border: none; border-radius: 8px; cursor: pointer; }
+    .ticker-buttons button {
+      margin: 0.5em;
+      padding: 0.7em 1.2em;
+      font-size: 1em;
+      border: none;
+      border-radius: 8px;
+      background: #222;
+      color: #fff;
+      cursor: pointer;
+    }
+    .ticker-buttons button:hover {
+      background: lime;
+      color: black;
+    }
+    button#play {
+      margin-top: 2em;
+      padding: 1em 2em;
+      font-size: 1.2em;
+      background: lime;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
     .donate { margin-top: 3em; }
   </style>
 </head>
 <body>
 
-  <h1>💨 Live Fart Ticker</h1>
-  <div id="prices">
-    <p>Loading Bitcoin prices...</p>
+  <h1>💨 Fart Ticker</h1>
+
+  <div class="ticker-buttons">
+    <button onclick="setAsset('bitcoin')">Bitcoin</button>
+    <button onclick="setAsset('ethereum')">Ethereum</button>
+    <button onclick="setAsset('^IXIC')">NASDAQ</button>
+    <button onclick="setAsset('^GSPC')">S&P 500</button>
+    <button onclick="setAsset('^DJI')">DOW</button>
+    <button onclick="setAsset('^VIX')">VIX</button>
   </div>
 
-  <button onclick="playStretched()">▶️ Play Sound</button>
+  <div id="prices">
+    <p>Loading...</p>
+  </div>
+
+  <button id="play" onclick="playStretched()">▶️ Play Sound</button>
 
   <div class="donate">
     <a href="https://www.buymeacoffee.com/fartticker" target="_blank">
@@ -29,19 +61,41 @@
 
   <script>
     let percentChange = 0;
+    let currentAsset = 'bitcoin';
 
-    async function fetchBTCChange() {
-      const res = await fetch('https://api.coingecko.com/api/v3/coins/bitcoin');
+    async function fetchCoinGecko(asset) {
+      const res = await fetch(`https://api.coingecko.com/api/v3/coins/${asset}`);
       const data = await res.json();
-      const current = data.market_data.current_price.usd;
-      const yesterday = current / (1 + data.market_data.price_change_percentage_24h / 100);
-      percentChange = parseFloat(data.market_data.price_change_percentage_24h.toFixed(2));
+      const price = data.market_data.current_price.usd;
+      const change = data.market_data.price_change_percentage_24h;
+      updatePriceDisplay(asset, price, change);
+    }
 
+    async function fetchYahooFinance(symbol) {
+      const query = await fetch(`https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?range=1d&interval=1d`);
+      const data = await query.json();
+      const result = data.chart.result[0];
+      const prices = result.indicators.quote[0].close;
+      const change = ((prices[prices.length - 1] - prices[0]) / prices[0]) * 100;
+      updatePriceDisplay(symbol, prices[prices.length - 1], change);
+    }
+
+    function updatePriceDisplay(asset, price, change) {
+      percentChange = parseFloat(change.toFixed(2));
       document.getElementById('prices').innerHTML = `
-        <p>💰 Current BTC: $${current.toFixed(2)}</p>
-        <p>🕒 Yesterday's BTC: $${yesterday.toFixed(2)}</p>
-        <p><strong>Live Change: ${percentChange}%</strong></p>
+        <p>📈 ${asset.toUpperCase()}</p>
+        <p>💰 Current Price: $${price.toFixed(2)}</p>
+        <p><strong>Change: ${percentChange}%</strong></p>
       `;
+    }
+
+    function setAsset(asset) {
+      currentAsset = asset;
+      if (asset === 'bitcoin' || asset === 'ethereum') {
+        fetchCoinGecko(asset);
+      } else {
+        fetchYahooFinance(asset);
+      }
     }
 
     async function playStretched() {
@@ -62,7 +116,7 @@
       source.start();
     }
 
-    fetchBTCChange();
+    setAsset('bitcoin');
   </script>
 </body>
 </html>
