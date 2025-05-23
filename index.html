@@ -4,9 +4,26 @@
 <head>
   <meta charset="UTF-8">
   <title>Fart Ticker – Support with Stripe</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    body { font-family: sans-serif; text-align: center; margin-top: 2em; background: #111; color: #fff; }
+    :root {
+      --bg: #111;
+      --fg: #fff;
+    }
+    [data-theme="light"] {
+      --bg: #fff;
+      --fg: #111;
+    }
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      margin-top: 2em;
+      background: var(--bg);
+      color: var(--fg);
+      transition: background 0.3s, color 0.3s;
+    }
     h1 { font-size: 2em; }
+    #description { font-size: 0.9em; margin: 0.5em 0 1em; color: gray; }
     #prices { margin: 1em 0; }
     .ticker-buttons button {
       margin: 0.5em;
@@ -31,30 +48,62 @@
       border-radius: 8px;
       cursor: pointer;
     }
-    .donate { margin-top: 3em; }
+    .donate, .share, .controls { margin-top: 2em; }
+    .share button, .controls button {
+      margin: 0.25em;
+      padding: 0.5em 1em;
+      background: #444;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .animation {
+      margin-top: 1em;
+      font-size: 2em;
+      display: none;
+    }
+    .show { display: block; animation: float 1s ease-out; }
+    @keyframes float {
+      0% { transform: translateY(0); opacity: 0; }
+      50% { opacity: 1; }
+      100% { transform: translateY(-20px); opacity: 0; }
+    }
   </style>
 </head>
-<body>
+<body data-theme="dark">
 
   <h1>💨 Fart Ticker</h1>
+  <div id="description">This page turns crypto price changes into fart sounds.</div>
 
   <div class="ticker-buttons">
     <button onclick="setAsset('bitcoin')">Bitcoin</button>
     <button onclick="setAsset('ethereum')">Ethereum</button>
   </div>
 
-  <div id="prices">
-    <p>Loading...</p>
+  <div id="prices"><p>Loading...</p></div>
+
+  <div class="controls">
+    <button onclick="setAsset(currentAsset)">🔄 Refresh</button>
+    <button onclick="toggleTheme()">🌓 Toggle Theme</button>
   </div>
 
-  <button id="play" onclick="playStretched()">▶️ Play Sound</button>
+  <button id="play" onclick="playStretched()">▶️ Play % Change Sound</button>
+
+  <div class="animation" id="animation">💨💸</div>
 
   <div class="donate">
     <a href="https://buy.stripe.com/cNi6oJevgdUi0ZR5TogrS00" target="_blank">
-      <button style="margin-top:2em; padding:1em 2em; font-size:1.2em; background:#00d084; color:#111; border:none; border-radius:8px; cursor:pointer;">
+      <button style="padding:1em 2em; font-size:1.2em; background:#00d084; color:#111; border:none; border-radius:8px; cursor:pointer;">
         💸 Support via Stripe
       </button>
     </a>
+  </div>
+
+  <div class="share">
+    <button onclick="share('twitter')">Share on Twitter</button>
+    <button onclick="share('facebook')">Share on Facebook</button>
+    <button onclick="share('reddit')">Share on Reddit</button>
   </div>
 
   <script>
@@ -67,14 +116,10 @@
       const price = data.market_data.current_price.usd;
       const change = data.market_data.price_change_percentage_24h;
       const yesterday = price / (1 + change / 100);
-      updatePriceDisplay(asset, price, yesterday, change);
-    }
-
-    function updatePriceDisplay(asset, current, yesterday, change) {
       percentChange = parseFloat(change.toFixed(2));
       document.getElementById('prices').innerHTML = `
         <p>📈 ${asset.toUpperCase()}</p>
-        <p>💰 Current Price: $${current.toFixed(2)}</p>
+        <p>💰 Current Price: $${price.toFixed(2)}</p>
         <p>🕒 Yesterday's Price: $${yesterday.toFixed(2)}</p>
         <p><strong>Change: ${percentChange}%</strong></p>
       `;
@@ -92,18 +137,35 @@
       const response = await fetch(file);
       const arrayBuffer = await response.arrayBuffer();
       const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
-
       const source = audioContext.createBufferSource();
       source.buffer = audioBuffer;
-
-      let stretch = 1 + Math.abs(percentChange);
-      source.playbackRate.value = 1 / stretch;
-
+      source.playbackRate.value = 1 / (1 + Math.abs(percentChange));
       source.connect(audioContext.destination);
       source.start();
+      document.getElementById('animation').classList.add('show');
+      setTimeout(() => document.getElementById('animation').classList.remove('show'), 1000);
+    }
+
+    function toggleTheme() {
+      const body = document.body;
+      body.dataset.theme = body.dataset.theme === "light" ? "dark" : "light";
+    }
+
+    function share(platform) {
+      const url = encodeURIComponent("https://fartticker.com");
+      const text = encodeURIComponent("Hear today’s market move as a fart: ");
+      const links = {
+        twitter: `https://twitter.com/intent/tweet?text=${text}&url=${url}`,
+        facebook: `https://www.facebook.com/sharer/sharer.php?u=${url}`,
+        reddit: `https://www.reddit.com/submit?url=${url}&title=${text}`
+      };
+      window.open(links[platform], "_blank");
     }
 
     setAsset('bitcoin');
   </script>
+
+  <!-- Cloudflare Web Analytics -->
+  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "00000000-0000-0000-0000-000000000000"}'></script>
 </body>
 </html>
