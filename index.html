@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Fart Ticker – Multi Asset + Yesterday</title>
+  <title>Fart Ticker – Multi Asset + Working Indices</title>
   <style>
     body { font-family: sans-serif; text-align: center; margin-top: 2em; background: #111; color: #fff; }
     h1 { font-size: 2em; }
@@ -72,14 +72,19 @@
       updatePriceDisplay(asset, price, yesterday, change);
     }
 
-    async function fetchYahooFinance(symbol) {
-      const query = await fetch(`https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?range=1d&interval=1d`);
-      const data = await query.json();
-      const result = data.chart.result[0];
-      const prices = result.indicators.quote[0].close;
-      const yesterday = prices[0];
-      const current = prices[prices.length - 1];
-      const change = ((current - yesterday) / yesterday) * 100;
+    async function fetchIndex(symbol) {
+      const fmpMap = {
+        '^IXIC': '^IXIC',
+        '^GSPC': '^GSPC',
+        '^DJI': '^DJI',
+        '^VIX': '^VIX'
+      };
+      const url = `https://financialmodelingprep.com/api/v3/quote/${fmpMap[symbol]}?apikey=demo`;
+      const response = await fetch(url);
+      const data = await response.json();
+      const current = data[0].price;
+      const change = data[0].changesPercentage;
+      const yesterday = current / (1 + (change / 100));
       updatePriceDisplay(symbol, current, yesterday, change);
     }
 
@@ -98,7 +103,7 @@
       if (asset === 'bitcoin' || asset === 'ethereum') {
         fetchCoinGecko(asset);
       } else {
-        fetchYahooFinance(asset);
+        fetchIndex(asset);
       }
     }
 
