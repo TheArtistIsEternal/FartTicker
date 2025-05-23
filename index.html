@@ -100,6 +100,12 @@
   <h1 class="trail">Fart Ticker</h1>
   <div id="description">This page turns crypto price changes into fart sounds.</div>
   <div id="tagline" style="font-style:italic; margin-top:0.5em; color:gray;"></div>
+
+  <div class="ticker-buttons">
+    <button onclick="setAsset('bitcoin')">🚀 Bitcoin</button>
+    <button onclick="setAsset('ethereum')">♦ Ethereum</button>
+  </div>
+
   <div style="margin: 1em;">
     <select id="tickerDropdown" onchange="changeTicker(this.value)">
       <option value="">📊 Select a Ticker</option>
@@ -116,6 +122,7 @@
     </select>
   </div>
 
+  <div id="prices"><p>Loading...</p></div>
   <script>
     const taglines = ['Today’s market movement? Downwind.', 'Farted +3.4% overnight.', 'Holding strong... like last night’s burrito.', 'Markets passed gas. Did you hear it?', 'When crypto moves, we toot.', 'Sound investing, literally.', 'Wall Street’s whoopee cushion.', 'The only ticker that stinks by design.', 'Flatulent but accurate.', 'Today’s sound? Full-bodied.'];
     document.addEventListener('DOMContentLoaded', () => {
@@ -124,13 +131,6 @@
     });
   </script>
 
-
-  <div class="ticker-buttons">
-    <button onclick="setAsset('bitcoin')">🚀 Bitcoin</button>
-    <button onclick="setAsset('ethereum')">♦ Ethereum</button>
-  </div>
-
-  <div id="prices"><p>Loading...</p></div>
 
   <div class="controls">
     <button onclick="setAsset(currentAsset)">🔄 Refresh</button>
