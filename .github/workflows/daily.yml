@@ -6,6 +6,9 @@ on:
     - cron: "0 14 * * *"  # Daily at 8AM MT / 10AM ET
   workflow_dispatch:
 
+permissions:
+  contents: write  # Allow writing back to the repo
+
 jobs:
   build:
     runs-on: ubuntu-latest
