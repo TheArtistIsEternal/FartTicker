@@ -128,7 +128,15 @@
     <button onclick="share('twitter')">Share on Twitter</button>
     <button onclick="share('facebook')">Share on Facebook</button>
     <button onclick="share('reddit')">Share on Reddit</button>
+    <button onclick="copyLink()">📎 Copy Website Link</button>
   </div>
+  <script>
+    function copyLink() {
+      navigator.clipboard.writeText("https://fartticker.com")
+        .then(() => alert("Link copied! 💨"))
+        .catch(() => alert("Couldn't copy link."));
+    }
+  </script>
 
   <script>
     let percentChange = 0;
