@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Fart Ticker – Multi Asset</title>
+  <title>Fart Ticker – Multi Asset + Yesterday</title>
   <style>
     body { font-family: sans-serif; text-align: center; margin-top: 2em; background: #111; color: #fff; }
     h1 { font-size: 2em; }
@@ -68,7 +68,8 @@
       const data = await res.json();
       const price = data.market_data.current_price.usd;
       const change = data.market_data.price_change_percentage_24h;
-      updatePriceDisplay(asset, price, change);
+      const yesterday = price / (1 + change / 100);
+      updatePriceDisplay(asset, price, yesterday, change);
     }
 
     async function fetchYahooFinance(symbol) {
@@ -76,15 +77,18 @@
       const data = await query.json();
       const result = data.chart.result[0];
       const prices = result.indicators.quote[0].close;
-      const change = ((prices[prices.length - 1] - prices[0]) / prices[0]) * 100;
-      updatePriceDisplay(symbol, prices[prices.length - 1], change);
+      const yesterday = prices[0];
+      const current = prices[prices.length - 1];
+      const change = ((current - yesterday) / yesterday) * 100;
+      updatePriceDisplay(symbol, current, yesterday, change);
     }
 
-    function updatePriceDisplay(asset, price, change) {
+    function updatePriceDisplay(asset, current, yesterday, change) {
       percentChange = parseFloat(change.toFixed(2));
       document.getElementById('prices').innerHTML = `
         <p>📈 ${asset.toUpperCase()}</p>
-        <p>💰 Current Price: $${price.toFixed(2)}</p>
+        <p>💰 Current Price: $${current.toFixed(2)}</p>
+        <p>🕒 Yesterday's Price: $${yesterday.toFixed(2)}</p>
         <p><strong>Change: ${percentChange}%</strong></p>
       `;
     }
