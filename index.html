@@ -106,23 +106,15 @@
     <button onclick="setAsset('ethereum')">♦ Ethereum</button>
   </div>
 
-  <div style="margin: 1em;">
-    <select id="tickerDropdown" onchange="changeTicker(this.value)">
-      <option value="">📊 Select a Ticker</option>
-      <option value="bitcoin">🚀 Bitcoin</option>
-      <option value="ethereum">♦ Ethereum</option>
-      <option value="dogecoin">🐶 Dogecoin</option>
-      <option value="solana">🌞 Solana</option>
-      <option value="tesla">🚗 Tesla (TSLA)</option>
-      <option value="apple">🍎 Apple (AAPL)</option>
-      <option value="amazon">📦 Amazon (AMZN)</option>
-      <option value="microsoft">🪟 Microsoft (MSFT)</option>
-      <option value="google">🔍 Google (GOOG)</option>
-      <option value="meta">📘 Meta (META)</option>
-    </select>
+  <div class="ticker-buttons">
+    <button onclick="setAsset('bitcoin')">🚀 Bitcoin</button>
+    <button onclick="setAsset('ethereum')">♦ Ethereum</button>
+    <button onclick="setAsset('dogecoin')">🐶 Dogecoin</button>
+    <button onclick="setAsset('solana')">🌞 Solana</button>
   </div>
 
   <div id="prices"><p>Loading...</p></div>
+
   <script>
     const taglines = ['Today’s market movement? Downwind.', 'Farted +3.4% overnight.', 'Holding strong... like last night’s burrito.', 'Markets passed gas. Did you hear it?', 'When crypto moves, we toot.', 'Sound investing, literally.', 'Wall Street’s whoopee cushion.', 'The only ticker that stinks by design.', 'Flatulent but accurate.', 'Today’s sound? Full-bodied.'];
     document.addEventListener('DOMContentLoaded', () => {
@@ -222,9 +214,13 @@
     setAsset('bitcoin');
   </script>
 
-  <div id="view-counter" style="margin-top:2em; font-size:0.9em; color:gray;">🔢 Visitors tracked by Cloudflare</div>
-
-<!-- Cloudflare Web Analytics -->
+  <!-- Cloudflare Web Analytics -->
   <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "00000000-0000-0000-0000-000000000000"}'></script>
+</body>
+</html>
+
+  <footer style="margin-top:3em; font-size:0.8em; color:gray;">
+    © FartTicker.com 2025 💨 All rights reserved.
+  </footer>
 </body>
 </html>
