@@ -3,7 +3,7 @@ name: Generate Daily Audio
 
 on:
   schedule:
-    - cron: "0 14 * * *"  # Runs daily at 8AM MT / 10AM ET
+    - cron: "0 14 * * *"  # Daily at 8AM MT / 10AM ET
   workflow_dispatch:
 
 jobs:
