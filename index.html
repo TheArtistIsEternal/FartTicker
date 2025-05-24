@@ -150,12 +150,38 @@
     </a>
   </div>
 
+  
+<div class="crypto-tips" style="margin-top: 2em;">
+  <h2 style="font-size: 1.2em;">🪙 Tip Me in Crypto</h2>
+
+  <div style="margin-bottom: 1.5em;">
+    <strong>Bitcoin</strong><br>
+    <img src="bitcoin_qr.png" alt="Bitcoin QR" style="width:140px; margin:0.5em auto;"><br>
+    <code style="font-size: 0.9em;">bc1q8j2sgjuytjwvhrjtnek9vueg8vdk7m0wytr8vw</code><br>
+    <button onclick="copyToClipboard('bc1q8j2sgjuytjwvhrjtnek9vueg8vdk7m0wytr8vw')">📋 Copy</button>
+  </div>
+
+  <div style="margin-bottom: 1.5em;">
+    <strong>Ethereum</strong><br>
+    <img src="ethereum_qr.png" alt="Ethereum QR" style="width:140px; margin:0.5em auto;"><br>
+    <code style="font-size: 0.9em;">0x6ff1725E66703808d23B7275979Ebe5F299219B7</code><br>
+    <button onclick="copyToClipboard('0x6ff1725E66703808d23B7275979Ebe5F299219B7')">📋 Copy</button>
+  </div>
+
+  <div style="margin-bottom: 1.5em;">
+    <strong>Solana</strong><br>
+    <img src="solana_qr.png" alt="Solana QR" style="width:140px; margin:0.5em auto;"><br>
+    <code style="font-size: 0.9em;">6kKSTsZBkAKtPkRzStT8e1Vc9fgitPmXgC6ZgN4t5bDs</code><br>
+    <button onclick="copyToClipboard('6kKSTsZBkAKtPkRzStT8e1Vc9fgitPmXgC6ZgN4t5bDs')">📋 Copy</button>
+  </div>
+</div>
+
+
   <div class="share" style="margin-top: 2em;">
-    <p style="font-size: 0.95em; margin-bottom: 0.5em;">Share Fart Ticker 💨 with your people:</p>
-    <button onclick="share('twitter')" style="margin: 0.25em; padding: 0.6em 1.2em; background: #1DA1F2; color: white; border: none; border-radius: 6px; cursor: pointer;">🐦 Twitter</button>
-    <button onclick="share('facebook')" style="margin: 0.25em; padding: 0.6em 1.2em; background: #4267B2; color: white; border: none; border-radius: 6px; cursor: pointer;">📘 Facebook</button>
-    <button onclick="share('reddit')" style="margin: 0.25em; padding: 0.6em 1.2em; background: #FF4500; color: white; border: none; border-radius: 6px; cursor: pointer;">👽 Reddit</button>
-    <button onclick="copyLink()" style="margin: 0.25em; padding: 0.6em 1.2em; background: gray; color: white; border: none; border-radius: 6px; cursor: pointer;">📎 Copy Link</button>
+    <button onclick="share('twitter')">Share on Twitter</button>
+    <button onclick="share('facebook')">Share on Facebook</button>
+    <button onclick="share('reddit')">Share on Reddit</button>
+    <button onclick="copyLink()">📎 Copy Website Link</button>
   </div>
 
   <footer style="margin-top:3em; font-size:0.8em; color:gray;">
@@ -240,6 +266,13 @@
     }
 
     setAsset('bitcoin');
+
+    function copyToClipboard(text) {
+      navigator.clipboard.writeText(text)
+        .then(() => alert("Address copied! 💸"))
+        .catch(() => alert("Failed to copy address."));
+    }
+    
 
     function share(platform) {
       const url = encodeURIComponent("https://fartticker.com");
