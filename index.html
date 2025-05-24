@@ -125,9 +125,9 @@
   
 <div style="margin-top: 1.5em; position: relative;">
   <input id="assetSearch" type="text" placeholder="Search symbols (e.g. BTC, ETH)" 
-    style="padding: 0.5em; width: 32%; border-radius: 6px; border: none; font-size: 1em;" 
+    style="padding: 0.5em; width: 26%; border-radius: 6px; border: none; font-size: 1em;" 
     oninput="filterCoins()" onkeydown="if (event.key === 'Enter') searchAsset()">
-  <div id="autocomplete" style="position: absolute; left: 50%; transform: translateX(-50%); background: white; color: black; border-radius: 6px; width: 32%; max-height: 180px; overflow-y: auto; box-shadow: 0 4px 6px rgba(0,0,0,0.2); z-index: 10;"></div>
+  <div id="autocomplete" style="position: absolute; left: 50%; transform: translateX(-50%); background: white; color: black; border-radius: 6px; width: 26%; max-height: 180px; overflow-y: auto; box-shadow: 0 4px 6px rgba(0,0,0,0.2); z-index: 10;"></div>
   <button onclick="searchAsset()" style="padding: 0.5em 1.2em; background: #333; color: white; border: none; border-radius: 6px; margin-left: 0.5em;">
     🔍 Search
   </button>
@@ -322,6 +322,31 @@ fetch("https://api.coingecko.com/api/v3/coins/list")
   .then(data => coinList = data);
 
 function filterCoins() {
+  const input = document.getElementById("assetSearch");
+  const dropdown = document.getElementById("autocomplete");
+  const query = input.value.trim().toLowerCase();
+  dropdown.innerHTML = "";
+
+  if (!query || !coinList.length) return;
+
+  const matches = coinList.filter(coin =>
+    coin.name.toLowerCase().includes(query) || coin.symbol.toLowerCase().includes(query)
+  ).slice(0, 10);
+
+  matches.forEach(coin => {
+    const option = document.createElement("div");
+    option.style.padding = "0.4em 1em";
+    option.style.cursor = "pointer";
+    option.style.borderBottom = "1px solid #ccc";
+    option.textContent = `${coin.name} (${coin.symbol.toUpperCase()})`;
+    option.onclick = () => {
+      setAsset(coin.id);
+      input.value = "";
+      dropdown.innerHTML = "";
+    };
+    dropdown.appendChild(option);
+  });
+}
   const input = document.getElementById("assetSearch").value.toLowerCase();
   const dropdown = document.getElementById("autocomplete");
   dropdown.innerHTML = "";
