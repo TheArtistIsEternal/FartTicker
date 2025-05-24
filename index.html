@@ -151,28 +151,32 @@
   </div>
 
   
+
 <div class="crypto-tips" style="margin-top: 2em;">
   <h2 style="font-size: 1.2em;">🪙 Tip Me in Crypto</h2>
 
-  <div style="margin-bottom: 1.5em;">
-    <strong>Bitcoin</strong><br>
-    <img src="bitcoin_qr.png" alt="Bitcoin QR" style="width:140px; margin:0.5em auto;"><br>
-    <code style="font-size: 0.9em;">bc1q8j2sgjuytjwvhrjtnek9vueg8vdk7m0wytr8vw</code><br>
-    <button onclick="copyToClipboard('bc1q8j2sgjuytjwvhrjtnek9vueg8vdk7m0wytr8vw')">📋 Copy</button>
+  <div style="margin: 1em 0;">
+    <strong>🟠 Bitcoin</strong><br>
+    <code id="btcAddress" style="font-size: 0.9em;">bc1q8j2sgjuytjwvhrjtnek9vueg8vdk7m0wytr8vw</code><br>
+    <button onclick="copyToClipboard('bc1q8j2sgjuytjwvhrjtnek9vueg8vdk7m0wytr8vw')" style="margin: 0.25em; padding: 0.5em 1em;">📋 Copy</button>
+    <button onclick="toggleQR('btcQR')" style="margin: 0.25em; padding: 0.5em 1em;">🔗 Show QR</button><br>
+    <img id="btcQR" src="bitcoin_qr.png" style="display:none; margin-top: 0.5em; width: 140px;">
   </div>
 
-  <div style="margin-bottom: 1.5em;">
-    <strong>Ethereum</strong><br>
-    <img src="ethereum_qr.png" alt="Ethereum QR" style="width:140px; margin:0.5em auto;"><br>
-    <code style="font-size: 0.9em;">0x6ff1725E66703808d23B7275979Ebe5F299219B7</code><br>
-    <button onclick="copyToClipboard('0x6ff1725E66703808d23B7275979Ebe5F299219B7')">📋 Copy</button>
+  <div style="margin: 1em 0;">
+    <strong>🟣 Ethereum</strong><br>
+    <code id="ethAddress" style="font-size: 0.9em;">0x6ff1725E66703808d23B7275979Ebe5F299219B7</code><br>
+    <button onclick="copyToClipboard('0x6ff1725E66703808d23B7275979Ebe5F299219B7')" style="margin: 0.25em; padding: 0.5em 1em;">📋 Copy</button>
+    <button onclick="toggleQR('ethQR')" style="margin: 0.25em; padding: 0.5em 1em;">🔗 Show QR</button><br>
+    <img id="ethQR" src="ethereum_qr.png" style="display:none; margin-top: 0.5em; width: 140px;">
   </div>
 
-  <div style="margin-bottom: 1.5em;">
-    <strong>Solana</strong><br>
-    <img src="solana_qr.png" alt="Solana QR" style="width:140px; margin:0.5em auto;"><br>
-    <code style="font-size: 0.9em;">6kKSTsZBkAKtPkRzStT8e1Vc9fgitPmXgC6ZgN4t5bDs</code><br>
-    <button onclick="copyToClipboard('6kKSTsZBkAKtPkRzStT8e1Vc9fgitPmXgC6ZgN4t5bDs')">📋 Copy</button>
+  <div style="margin: 1em 0;">
+    <strong>🔵 Solana</strong><br>
+    <code id="solAddress" style="font-size: 0.9em;">6kKSTsZBkAKtPkRzStT8e1Vc9fgitPmXgC6ZgN4t5bDs</code><br>
+    <button onclick="copyToClipboard('6kKSTsZBkAKtPkRzStT8e1Vc9fgitPmXgC6ZgN4t5bDs')" style="margin: 0.25em; padding: 0.5em 1em;">📋 Copy</button>
+    <button onclick="toggleQR('solQR')" style="margin: 0.25em; padding: 0.5em 1em;">🔗 Show QR</button><br>
+    <img id="solQR" src="solana_qr.png" style="display:none; margin-top: 0.5em; width: 140px;">
   </div>
 </div>
 
@@ -266,6 +270,12 @@
     }
 
     setAsset('bitcoin');
+
+    function toggleQR(id) {
+      const el = document.getElementById(id);
+      el.style.display = (el.style.display === "none") ? "block" : "none";
+    }
+    
 
     function copyToClipboard(text) {
       navigator.clipboard.writeText(text)
