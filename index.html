@@ -27,10 +27,6 @@
       margin-bottom: 0.3em;
       position: relative;
     }
-    .trail {
-      display: inline-block;
-      position: relative;
-    }
     .trail::after {
       content: "💨";
       position: absolute;
@@ -101,8 +97,6 @@
   <div id="description">This page turns crypto price changes into fart sounds.</div>
   <div id="tagline" style="font-style:italic; margin-top:0.5em; color:gray;"></div>
 
-  
-
   <div class="ticker-buttons">
     <button onclick="setAsset('bitcoin')">🚀 Bitcoin</button>
     <button onclick="setAsset('ethereum')">♦ Ethereum</button>
@@ -111,20 +105,6 @@
   </div>
 
   <div id="prices"><p>Loading...</p></div>
-
-  <script>
-    const taglines = ['Today’s market movement? Downwind.', 'Farted +3.4% overnight.', 'Holding strong... like last night’s burrito.', 'Markets passed gas. Did you hear it?', 'When crypto moves, we toot.', 'Sound investing, literally.', 'Wall Street’s whoopee cushion.', 'The only ticker that stinks by design.', 'Flatulent but accurate.', 'Today’s sound? Full-bodied.'];
-    document.addEventListener('DOMContentLoaded', () => {
-      const tagline = taglines[Math.floor(Math.random() * taglines.length)];
-      document.getElementById('tagline').textContent = tagline;
-    });
-  </script>
-
-
-  <div class="controls">
-    <button onclick="setAsset(currentAsset)">🔄 Refresh</button>
-    <button onclick="toggleTheme()">🌓 Toggle Theme</button>
-  </div>
 
   <button id="play" onclick="playStretched()">Hear the Price Change 💨</button>
 
@@ -144,15 +124,33 @@
     <button onclick="share('reddit')">Share on Reddit</button>
     <button onclick="copyLink()">📎 Copy Website Link</button>
   </div>
-  <script>
-    function copyLink() {
-      navigator.clipboard.writeText("https://fartticker.com")
-        .then(() => alert("Link copied! 💨"))
-        .catch(() => alert("Couldn't copy link."));
-    }
-  </script>
+
+  <div style="margin-top: 2em;">
+    <button onclick="toggleTheme()" style="padding: 0.5em 1em;">🌓 Toggle Theme</button>
+  </div>
+
+  <footer style="margin-top:3em; font-size:0.8em; color:gray;">
+    © FartTicker.com 2025 💨 All rights reserved.
+  </footer>
 
   <script>
+    const taglines = [
+      "Today’s market movement? Downwind.",
+      "Farted +3.4% overnight.",
+      "Holding strong... like last night’s burrito.",
+      "Markets passed gas. Did you hear it?",
+      "When crypto moves, we toot.",
+      "Sound investing, literally.",
+      "Wall Street’s whoopee cushion.",
+      "The only ticker that stinks by design.",
+      "Flatulent but accurate.",
+      "Today’s sound? Full-bodied."
+    ];
+    document.addEventListener('DOMContentLoaded', () => {
+      const tagline = taglines[Math.floor(Math.random() * taglines.length)];
+      document.getElementById('tagline').textContent = tagline;
+    });
+
     let percentChange = 0;
     let currentAsset = 'bitcoin';
 
@@ -177,17 +175,29 @@
     }
 
     async function playStretched() {
-      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      if (window.source) {
+        try { window.source.stop(); } catch(e) {}
+        window.source.disconnect();
+      }
+      if (window.audioContext) {
+        window.audioContext.close().catch(() => {});
+      }
+      const audioContext = new AudioContext();
+      window.audioContext = audioContext;
+
       const isUp = percentChange >= 0;
       const file = isUp ? 'FART_1SEC_FORWARD.mp3' : 'FART_1SEC_REVERSE.mp3';
       const response = await fetch(file);
       const arrayBuffer = await response.arrayBuffer();
       const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+
       const source = audioContext.createBufferSource();
+      window.source = source;
       source.buffer = audioBuffer;
       source.playbackRate.value = 1 / (1 + Math.abs(percentChange));
       source.connect(audioContext.destination);
       source.start();
+
       document.getElementById('animation').classList.add('show');
       setTimeout(() => document.getElementById('animation').classList.remove('show'), 1000);
     }
@@ -208,21 +218,13 @@
       window.open(links[platform], "_blank");
     }
 
+    function copyLink() {
+      navigator.clipboard.writeText("https://fartticker.com")
+        .then(() => alert("Link copied! 💨"))
+        .catch(() => alert("Couldn't copy link."));
+    }
+
     setAsset('bitcoin');
   </script>
-
-  <!-- Cloudflare Web Analytics -->
-  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "00000000-0000-0000-0000-000000000000"}'></script>
-</body>
-</html>
-
-  
-  <div style="margin-top: 2em;">
-    <button onclick="toggleTheme()" style="padding: 0.5em 1em;">🌓 Toggle Theme</button>
-  </div>
-
-  <footer style="margin-top:3em; font-size:0.8em; color:gray;">
-    © FartTicker.com 2025 💨 All rights reserved.
-  </footer>
 </body>
 </html>
