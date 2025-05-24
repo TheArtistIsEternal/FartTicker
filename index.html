@@ -125,9 +125,9 @@
   
 <div style="margin-top: 1.5em; position: relative;">
   <input id="assetSearch" type="text" placeholder="Search symbols (e.g. BTC, ETH)" 
-    style="padding: 0.5em; width: 40%; border-radius: 6px; border: none; font-size: 1em;" 
+    style="padding: 0.5em; width: 32%; border-radius: 6px; border: none; font-size: 1em;" 
     oninput="filterCoins()" onkeydown="if (event.key === 'Enter') searchAsset()">
-  <div id="autocomplete" style="position: absolute; left: 50%; transform: translateX(-50%); background: white; color: black; border-radius: 6px; width: 40%; max-height: 200px; overflow-y: auto; box-shadow: 0 4px 6px rgba(0,0,0,0.2); z-index: 999;"></div>
+  <div id="autocomplete" style="position: absolute; left: 50%; transform: translateX(-50%); background: white; color: black; border-radius: 6px; width: 32%; max-height: 180px; overflow-y: auto; box-shadow: 0 4px 6px rgba(0,0,0,0.2); z-index: 10;"></div>
   <button onclick="searchAsset()" style="padding: 0.5em 1.2em; background: #333; color: white; border: none; border-radius: 6px; margin-left: 0.5em;">
     🔍 Search
   </button>
@@ -303,6 +303,19 @@
     }
   
 let coinList = [];
+let dropdownOpen = false;
+let dropdown = document.getElementById("autocomplete");
+
+fetch("https://api.coingecko.com/api/v3/coins/list")
+  .then(res => res.json())
+  .then(data => { coinList = data; });
+
+document.addEventListener("click", function(e) {
+  if (!e.target.closest("#autocomplete") && e.target.id !== "assetSearch") {
+    document.getElementById("autocomplete").innerHTML = "";
+    dropdownOpen = false;
+  }
+});
 
 fetch("https://api.coingecko.com/api/v3/coins/list")
   .then(res => res.json())
