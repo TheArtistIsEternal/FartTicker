@@ -78,6 +78,39 @@
       50% { opacity: 1; }
       100% { transform: translateY(-20px); opacity: 0; }
     }
+  
+    .ladies-mode {
+      background: linear-gradient(135deg, #2a2a2a, #3a1f30, #50263f);
+      background-attachment: fixed;
+    }
+
+  
+    .ladies-mode::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      background-image: radial-gradient(circle, rgba(255,192,203,0.4) 2px, transparent 2px),
+                        radial-gradient(circle, rgba(255,182,193,0.4) 2px, transparent 2px);
+      background-size: 20px 20px;
+      background-position: 0 0, 10px 10px;
+      animation: glitter 3s linear infinite;
+      z-index: 0;
+    }
+
+    @keyframes glitter {
+      0% { background-position: 0 0, 10px 10px; }
+      100% { background-position: 20px 20px, 30px 30px; }
+    }
+
+    body > *:not(script):not(style):not(link):not(meta) {
+      position: relative;
+      z-index: 1;
+    }
+
   </style>
 </head>
 <body data-theme="dark">
@@ -229,9 +262,7 @@
     const btn = document.getElementById("pitchToggle");
     btn.textContent = pitchUp ? "🕺 Back to the Boys" : "💃 For the Ladies";
 
-    document.body.style.background = pitchUp
-      ? "linear-gradient(135deg, #2a2a2a, #3a1f30, #50263f)"
-      : "";
+    document.body.classList.toggle("ladies-mode", pitchUp);
   }
 </script>
 </body>
@@ -253,8 +284,6 @@
     const btn = document.getElementById("pitchToggle");
     btn.textContent = pitchUp ? "🕺 Back to the Boys" : "💃 For the Ladies";
 
-    document.body.style.background = pitchUp
-      ? "linear-gradient(135deg, #2a2a2a, #3a1f30, #50263f)"
-      : "";
+    document.body.classList.toggle("ladies-mode", pitchUp);
   }
 </script>
