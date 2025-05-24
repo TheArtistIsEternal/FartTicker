@@ -123,9 +123,7 @@
   </div>
 
 <div style="margin-top: 1.5em;">
-  <input id="assetSearch" type="text" placeholder="Search any crypto (e.g., litecoin, avalanche)" 
-    style="padding: 0.6em; width: 60%; border-radius: 6px; border: none; font-size: 1em;" 
-    onkeydown="if (event.key === 'Enter') searchAsset()">
+  <div style="margin-top: 1.5em;">
   <button onclick="searchAsset()" style="padding: 0.6em 1.2em; background: #333; color: white; border: none; border-radius: 6px; margin-left: 0.5em;">
     🔍 Search
   </button>
@@ -270,7 +268,12 @@
 
     setAsset('bitcoin');
 
+
 function searchAsset() {
+  const query = document.getElementById("assetSearch").value.trim().toLowerCase();
+  if (!query) return;
+  setAsset(query);
+}
   const query = document.getElementById("assetSearch").value.trim().toLowerCase();
   if (!query) return;
   setAsset(query);
