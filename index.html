@@ -122,15 +122,7 @@
     <button onclick="setAsset('dogecoin')">🐶 Dogecoin</button>
   </div>
 
-<div style="margin-top: 1.5em;">
-  <div style="margin-top: 1.5em;">
-  <button onclick="searchAsset()" style="padding: 0.6em 1.2em; background: #333; color: white; border: none; border-radius: 6px; margin-left: 0.5em;">
-    🔍 Search
-  </button>
-</div>
-
-
-  <div id="prices"></div>
+  <div id="prices"><p>Loading...</p></div>
 
   <div style="margin: 0.4em 0;">
     <button id="play" onclick="playStretched()">▶️ Play the Price Change</button>
@@ -160,9 +152,9 @@
   <h2 style="font-size: 1.2em;">🪙 Tip Me in Crypto</h2>
 
   <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 1em;">
-    <button onclick="copyToClipboard('bc1q8j2sgjuytjwvhrjtnek9vueg8vdk7m0wytr8vw')" style="padding: 0.6em 1.2em; background: #f7931a; color: white; border: none; border-radius: 6px; cursor: pointer;">🟠 Bitcoin ID</button>
-    <button onclick="copyToClipboard('0x6ff1725E66703808d23B7275979Ebe5F299219B7')" style="padding: 0.6em 1.2em; background: #627eea; color: white; border: none; border-radius: 6px; cursor: pointer;">🟣 Ethereum ID</button>
-    <button onclick="copyToClipboard('6kKSTsZBkAKtPkRzStT8e1Vc9fgitPmXgC6ZgN4t5bDs')" style="padding: 0.6em 1.2em; background: #66f9a1; color: black; border: none; border-radius: 6px; cursor: pointer;">🔵 Solana ID</button>
+    <button onclick="copyToClipboard('bc1q8j2sgjuytjwvhrjtnek9vueg8vdk7m0wytr8vw')" style="padding: 0.6em 1.2em; background: #f7931a; color: white; border: none; border-radius: 6px; cursor: pointer;">🟠 Copy Bitcoin ID</button>
+    <button onclick="copyToClipboard('0x6ff1725E66703808d23B7275979Ebe5F299219B7')" style="padding: 0.6em 1.2em; background: #627eea; color: white; border: none; border-radius: 6px; cursor: pointer;">🟣 Copy Ethereum ID</button>
+    <button onclick="copyToClipboard('6kKSTsZBkAKtPkRzStT8e1Vc9fgitPmXgC6ZgN4t5bDs')" style="padding: 0.6em 1.2em; background: #66f9a1; color: black; border: none; border-radius: 6px; cursor: pointer;">🔵 Copy Solana ID</button>
   </div>
 </div>
 
@@ -180,7 +172,7 @@
   <p style="font-size: 0.95em;">Be the first to hear the fart 💨</p>
   <a href="https://forms.gle/v6xXgtWPmUYCk9m28" target="_blank">
     <button style="padding: 0.6em 1.2em; background: #00d084; color: black; border: none; border-radius: 6px; cursor: pointer;">
-      ✉️ Sign Up for Our Newsletter
+      ✉️ Sign Up for Email Updates
     </button>
   </a>
 </div>
@@ -267,17 +259,6 @@
     }
 
     setAsset('bitcoin');
-
-
-function searchAsset() {
-  const query = document.getElementById("assetSearch").value.trim().toLowerCase();
-  if (!query) return;
-  setAsset(query);
-}
-  const query = document.getElementById("assetSearch").value.trim().toLowerCase();
-  if (!query) return;
-  setAsset(query);
-}
 
     function toggleQR(id) {
       const el = document.getElementById(id);
