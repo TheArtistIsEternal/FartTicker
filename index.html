@@ -122,7 +122,19 @@
     <button onclick="setAsset('dogecoin')">🐶 Dogecoin</button>
   </div>
 
-  <div id="prices"><p>Loading...</p></div>
+  
+<div style="margin-top: 1.5em; position: relative;">
+  <input id="assetSearch" type="text" placeholder="Search symbols (e.g. BTC, ETH)" 
+    style="padding: 0.5em; width: 40%; border-radius: 6px; border: none; font-size: 1em;" 
+    oninput="filterCoins()" onkeydown="if (event.key === 'Enter') searchAsset()">
+  <div id="autocomplete" style="position: absolute; left: 50%; transform: translateX(-50%); background: white; color: black; border-radius: 6px; width: 40%; max-height: 200px; overflow-y: auto; box-shadow: 0 4px 6px rgba(0,0,0,0.2); z-index: 999;"></div>
+  <button onclick="searchAsset()" style="padding: 0.5em 1.2em; background: #333; color: white; border: none; border-radius: 6px; margin-left: 0.5em;">
+    🔍 Search
+  </button>
+</div>
+
+<div id="prices"><p>Loading...</p></div>
+
 
   <div style="margin: 0.4em 0;">
     <button id="play" onclick="playStretched()">▶️ Play the Price Change</button>
@@ -289,6 +301,49 @@
         .then(() => alert("Link copied! 💨"))
         .catch(() => alert("Couldn't copy link."));
     }
-  </script>
+  
+let coinList = [];
+
+fetch("https://api.coingecko.com/api/v3/coins/list")
+  .then(res => res.json())
+  .then(data => coinList = data);
+
+function filterCoins() {
+  const input = document.getElementById("assetSearch").value.toLowerCase();
+  const dropdown = document.getElementById("autocomplete");
+  dropdown.innerHTML = "";
+  if (!input) return;
+
+  const matches = coinList.filter(coin =>
+    coin.name.toLowerCase().includes(input) || coin.symbol.toLowerCase().includes(input)
+  ).slice(0, 10); // top 10 results
+
+  matches.forEach(coin => {
+    const div = document.createElement("div");
+    div.style.padding = "0.4em 1em";
+    div.style.cursor = "pointer";
+    div.style.borderBottom = "1px solid #ccc";
+    div.textContent = `${coin.name} (${coin.symbol.toUpperCase()})`;
+    div.onclick = () => {
+      setAsset(coin.id);
+      document.getElementById("assetSearch").value = "";
+      dropdown.innerHTML = "";
+    };
+    dropdown.appendChild(div);
+  });
+}
+
+function searchAsset() {
+  const input = document.getElementById("assetSearch").value.toLowerCase();
+  const match = coinList.find(coin =>
+    coin.id === input || coin.symbol.toLowerCase() === input
+  );
+  if (match) {
+    setAsset(match.id);
+    document.getElementById("autocomplete").innerHTML = "";
+  }
+}
+</script>
+
 </body>
 </html>
