@@ -122,6 +122,16 @@
     <button onclick="setAsset('dogecoin')">🐶 Dogecoin</button>
   </div>
 
+<div style="margin-top: 1.5em;">
+  <input id="assetSearch" type="text" placeholder="Search any crypto (e.g., litecoin, avalanche)" 
+    style="padding: 0.6em; width: 60%; border-radius: 6px; border: none; font-size: 1em;" 
+    onkeydown="if (event.key === 'Enter') searchAsset()">
+  <button onclick="searchAsset()" style="padding: 0.6em 1.2em; background: #333; color: white; border: none; border-radius: 6px; margin-left: 0.5em;">
+    🔍 Search
+  </button>
+</div>
+
+
   <div id="prices"><p>Loading...</p></div>
 
   <div style="margin: 0.4em 0;">
@@ -172,7 +182,7 @@
   <p style="font-size: 0.95em;">Be the first to hear the fart 💨</p>
   <a href="https://forms.gle/v6xXgtWPmUYCk9m28" target="_blank">
     <button style="padding: 0.6em 1.2em; background: #00d084; color: black; border: none; border-radius: 6px; cursor: pointer;">
-      ✉️ Sign Up for Email Updates
+      ✉️ Sign Up for Our Newsletter
     </button>
   </a>
 </div>
@@ -259,6 +269,12 @@
     }
 
     setAsset('bitcoin');
+
+function searchAsset() {
+  const query = document.getElementById("assetSearch").value.trim().toLowerCase();
+  if (!query) return;
+  setAsset(query);
+}
 
     function toggleQR(id) {
       const el = document.getElementById(id);
