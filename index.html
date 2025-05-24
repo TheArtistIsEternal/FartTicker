@@ -201,7 +201,7 @@
       const yesterday = price / (1 + change / 100);
       percentChange = parseFloat(change.toFixed(2));
       document.getElementById('prices').innerHTML = `
-        <p>📈 ${asset.toUpperCase()}</p>
+        <p>${asset.toUpperCase()}</p>
         <p>💰 Current Price: $${price.toFixed(2)}</p>
         <p>🕒 Yesterday's Price: $${yesterday.toFixed(2)}</p>
         <p><strong>Change: ${percentChange}%</strong></p>
