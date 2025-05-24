@@ -221,7 +221,19 @@
     }
 
     setAsset('bitcoin');
-  </script>
+  
+  let pitchUp = false;
+
+  function togglePitch() {
+    pitchUp = !pitchUp;
+    const btn = document.getElementById("pitchToggle");
+    btn.textContent = pitchUp ? "🕺 Back to the Boys" : "💃 For the Ladies";
+
+    document.body.style.background = pitchUp
+      ? "linear-gradient(135deg, #2a2a2a, #3a1f30, #50263f)"
+      : "";
+  }
+</script>
 </body>
 </html>
 
@@ -232,5 +244,17 @@
     pitchUp = !pitchUp;
     const btn = document.getElementById("pitchToggle");
     btn.textContent = pitchUp ? "🕺 Back to the Boys" : "💃 For the Ladies";
+  }
+
+  let pitchUp = false;
+
+  function togglePitch() {
+    pitchUp = !pitchUp;
+    const btn = document.getElementById("pitchToggle");
+    btn.textContent = pitchUp ? "🕺 Back to the Boys" : "💃 For the Ladies";
+
+    document.body.style.background = pitchUp
+      ? "linear-gradient(135deg, #2a2a2a, #3a1f30, #50263f)"
+      : "";
   }
 </script>
