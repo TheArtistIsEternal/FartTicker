@@ -135,7 +135,17 @@
 
   <div class="animation" id="animation">💨💸</div>
 
+  
+  <div class="share" style="margin-top: 2em;">
+    <p style="font-size: 0.9em; color: gray;">🔒 Brave users: disable Shields to allow full features (audio, API, crypto)</p>
+    <button onclick="share('twitter')">Share on Twitter</button>
+    <button onclick="share('facebook')">Share on Facebook</button>
+    <button onclick="share('reddit')">Share on Reddit</button>
+    <button onclick="copyLink()">📎 Copy Website Link</button>
+  </div>
+
   <div class="donate" style="margin-top:2em;">
+
     <a href="https://buy.stripe.com/cNi6oJevgdUi0ZR5TogrS00" target="_blank">
       <button style="padding:1em 2em; font-size:1.2em; background:#00d084; color:#111; border:none; border-radius:8px; cursor:pointer;">
         💸 Support My Art via Stripe
@@ -230,6 +240,23 @@
     }
 
     setAsset('bitcoin');
+
+    function share(platform) {
+      const url = encodeURIComponent("https://fartticker.com");
+      const text = encodeURIComponent("Hear today’s market move as a fart 💨: ");
+      const links = {
+        twitter: `https://twitter.com/intent/tweet?text=${text}&url=${url}`,
+        facebook: `https://www.facebook.com/sharer/sharer.php?u=${url}`,
+        reddit: `https://www.reddit.com/submit?url=${url}&title=${text}`
+      };
+      window.open(links[platform], "_blank");
+    }
+
+    function copyLink() {
+      navigator.clipboard.writeText("https://fartticker.com")
+        .then(() => alert("Link copied! 💨"))
+        .catch(() => alert("Couldn't copy link."));
+    }
   </script>
 </body>
 </html>
