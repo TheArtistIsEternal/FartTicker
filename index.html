@@ -182,134 +182,113 @@
   </footer>
 
   <script>
+    const taglines = [
+      "Today’s market movement? Downwind.",
+      "Farted +3.4% overnight.",
+      "Holding strong... like last night’s burrito.",
+      "Markets passed gas. Did you hear it?",
+      "When crypto moves, we toot.",
+      "Sound investing, literally.",
+      "Wall Street’s whoopee cushion.",
+      "The only ticker that stinks by design.",
+      "Flatulent but accurate.",
+      "Today’s sound? Full-bodied."
+    ];
+    document.addEventListener('DOMContentLoaded', () => {
+      const tagline = taglines[Math.floor(Math.random() * taglines.length)];
+      document.getElementById('tagline').textContent = tagline;
+    });
 
-let percentChange = 0;
-let currentAsset = 'bitcoin';
-let pitchUp = false;
-let preloadedData = {};
+    let percentChange = 0;
+    let currentAsset = 'bitcoin';
+    let pitchUp = false;
 
-async function preloadAssets() {
-  const topAssets = ['bitcoin', 'ethereum', 'solana', 'dogecoin'];
-  for (const asset of topAssets) {
-    const res = await fetch(`https://api.coingecko.com/api/v3/coins/${asset}`);
-    const data = await res.json();
-    preloadedData[asset] = data;
-  }
-}
-
-function setAsset(asset) {
-  currentAsset = asset;
-  if (preloadedData[asset]) {
-    renderPrice(preloadedData[asset], asset);
-  } else {
-    fetch(`https://api.coingecko.com/api/v3/coins/${asset}`)
-      .then(res => res.json())
-      .then(data => {
-        preloadedData[asset] = data;
-        renderPrice(data, asset);
-      });
-  }
-}
-
-function renderPrice(data, asset) {
-  const price = data.market_data.current_price.usd;
-  const change = data.market_data.price_change_percentage_24h;
-  const yesterday = price / (1 + change / 100);
-  percentChange = parseFloat(change.toFixed(2));
-  document.getElementById('prices').innerHTML = `
-    <p>📈 ${asset.toUpperCase()}</p>
-    <p>💰 Current Price: $${price.toFixed(2)}</p>
-    <p>🕒 Yesterday's Price: $${yesterday.toFixed(2)}</p>
-    <p><strong>Change: ${percentChange}%</strong></p>
-  `;
-}
-
-async function playStretched() {
-  const playButton = document.getElementById('play');
-  playButton.textContent = "💨 Stretching...";
-  playButton.disabled = true;
-
-  try {
-    if (window.source) {
-      try { window.source.stop(); } catch(e) {}
-      window.source.disconnect();
+    async function fetchCoinGecko(asset) {
+      const res = await fetch(`https://api.coingecko.com/api/v3/coins/${asset}`);
+      const data = await res.json();
+      const price = data.market_data.current_price.usd;
+      const change = data.market_data.price_change_percentage_24h;
+      const yesterday = price / (1 + change / 100);
+      percentChange = parseFloat(change.toFixed(2));
+      document.getElementById('prices').innerHTML = `
+        <p>📈 ${asset.toUpperCase()}</p>
+        <p>💰 Current Price: $${price.toFixed(2)}</p>
+        <p>🕒 Yesterday's Price: $${yesterday.toFixed(2)}</p>
+        <p><strong>Change: ${percentChange > 0 ? "+" : ""}${percentChange}%</strong></p>
+      `;
     }
-    if (window.audioContext) {
-      window.audioContext.close().catch(() => {});
+
+    function setAsset(asset) {
+      currentAsset = asset;
+      fetchCoinGecko(asset);
     }
-    const audioContext = new AudioContext();
-    window.audioContext = audioContext;
 
-    const isUp = percentChange >= 0;
-    const file = isUp ? 'FART_1SEC_FORWARD.mp3' : 'FART_1SEC_REVERSE.mp3';
-    const response = await fetch(file);
-    const arrayBuffer = await response.arrayBuffer();
-    const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+    async function playStretched() {
+      if (window.source) {
+        try { window.source.stop(); } catch(e) {}
+        window.source.disconnect();
+      }
+      if (window.audioContext) {
+        window.audioContext.close().catch(() => {});
+      }
+      const audioContext = new AudioContext();
+      window.audioContext = audioContext;
 
-    const source = audioContext.createBufferSource();
-    window.source = source;
-    source.buffer = audioBuffer;
-    source.playbackRate.value = (pitchUp ? 2 : 1) / (1 + Math.abs(percentChange));
-    source.connect(audioContext.destination);
-    source.start();
+      const isUp = percentChange >= 0;
+      const file = isUp ? 'FART_1SEC_FORWARD.mp3' : 'FART_1SEC_REVERSE.mp3';
+      const response = await fetch(file);
+      const arrayBuffer = await response.arrayBuffer();
+      const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
 
-    document.getElementById('animation').classList.add('show');
-    setTimeout(() => document.getElementById('animation').classList.remove('show'), 1000);
-  } catch (err) {
-    alert("Failed to play sound.");
-  } finally {
-    playButton.textContent = "▶️ Play the Price Change";
-    playButton.disabled = false;
-  }
-}
+      const source = audioContext.createBufferSource();
+      window.source = source;
+      source.buffer = audioBuffer;
+      source.playbackRate.value = (pitchUp ? 2 : 1) / (1 + Math.abs(percentChange));
+      source.connect(audioContext.destination);
+      source.start();
 
-function togglePitch() {
-  pitchUp = !pitchUp;
-  const btn = document.getElementById("pitchToggle");
-  btn.textContent = pitchUp ? "🕺 Back to the Boys" : "💃 For the Ladies";
-  document.body.classList.toggle("ladies-mode", pitchUp);
-}
+      document.getElementById('animation').classList.add('show');
+      setTimeout(() => document.getElementById('animation').classList.remove('show'), 1000);
+    }
 
-function copyToClipboard(text) {
-  navigator.clipboard.writeText(text)
-    .then(() => alert("Address copied! 💸"))
-    .catch(() => alert("Failed to copy address."));
-}
+    function togglePitch() {
+      pitchUp = !pitchUp;
+      const btn = document.getElementById("pitchToggle");
+      btn.textContent = pitchUp ? "🕺 Back to the Boys" : "💃 For the Ladies";
+      document.body.classList.toggle("ladies-mode", pitchUp);
+    }
 
-function share(platform) {
-  const url = encodeURIComponent("https://fartticker.com");
-  const text = encodeURIComponent("Hear today’s market move as a fart 💨: ");
-  const links = {
-    twitter: `https://twitter.com/intent/tweet?text=${text}&url=${url}`,
-    facebook: `https://www.facebook.com/sharer/sharer.php?u=${url}`,
-    reddit: `https://www.reddit.com/submit?url=${url}&title=${text}`
-  };
-  window.open(links[platform], "_blank");
-}
+    setAsset('bitcoin');
 
-function copyLink() {
-  navigator.clipboard.writeText("https://fartticker.com")
-    .then(() => alert("Link copied! 💨"))
-    .catch(() => alert("Couldn't copy link."));
-}
+    function toggleQR(id) {
+      const el = document.getElementById(id);
+      el.style.display = (el.style.display === "none") ? "block" : "none";
+    }
+    
 
-document.addEventListener('DOMContentLoaded', () => {
-  const taglines = [
-    "Today’s market movement? Downwind.",
-    "Farted +3.4% overnight.",
-    "Holding strong... like last night’s burrito.",
-    "Markets passed gas. Did you hear it?",
-    "When crypto moves, we toot.",
-    "Sound investing, literally.",
-    "Wall Street’s whoopee cushion.",
-    "The only ticker that stinks by design.",
-    "Flatulent but accurate.",
-    "Today’s sound? Full-bodied."
-  ];
-  document.getElementById('tagline').textContent = taglines[Math.floor(Math.random() * taglines.length)];
-  preloadAssets().then(() => setAsset('bitcoin'));
-});
+    function copyToClipboard(text) {
+      navigator.clipboard.writeText(text)
+        .then(() => alert("Address copied! 💸"))
+        .catch(() => alert("Failed to copy address."));
+    }
+    
 
-</script>
+    function share(platform) {
+      const url = encodeURIComponent("https://fartticker.com");
+      const text = encodeURIComponent("Hear today’s market move as a fart 💨: ");
+      const links = {
+        twitter: `https://twitter.com/intent/tweet?text=${text}&url=${url}`,
+        facebook: `https://www.facebook.com/sharer/sharer.php?u=${url}`,
+        reddit: `https://www.reddit.com/submit?url=${url}&title=${text}`
+      };
+      window.open(links[platform], "_blank");
+    }
+
+    function copyLink() {
+      navigator.clipboard.writeText("https://fartticker.com")
+        .then(() => alert("Link copied! 💨"))
+        .catch(() => alert("Couldn't copy link."));
+    }
+  </script>
 </body>
 </html>
